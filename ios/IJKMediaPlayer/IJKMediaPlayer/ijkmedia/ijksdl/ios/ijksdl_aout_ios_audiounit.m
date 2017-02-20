@@ -32,10 +32,6 @@
 
 #define SDL_IOS_AUDIO_MAX_CALLBACKS_PER_SEC 15
 
-struct SDL_Aout_Opaque {
-    IJKSDLAudioQueueController *aoutController;
-};
-
 static int aout_open_audio(SDL_Aout *aout, const SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 {
     assert(desired);
@@ -49,7 +45,7 @@ static int aout_open_audio(SDL_Aout *aout, const SDL_AudioSpec *desired, SDL_Aud
     }
 
     if (obtained)
-        *obtained = opaque->aoutController.spec;
+        *obtained = ((IJKSDLAudioQueueController *)opaque->aoutController).spec;
 
     return 0;
 }
@@ -60,9 +56,9 @@ static void aout_pause_audio(SDL_Aout *aout, int pause_on)
     SDL_Aout_Opaque *opaque = aout->opaque;
 
     if (pause_on) {
-        [opaque->aoutController pause];
+        [(IJKSDLAudioQueueController *)opaque->aoutController pause];
     } else {
-        [opaque->aoutController play];
+        [(IJKSDLAudioQueueController *)opaque->aoutController play];
     }
 }
 
@@ -71,7 +67,7 @@ static void aout_flush_audio(SDL_Aout *aout)
     SDLTRACE("aout_flush_audio()\n");
     SDL_Aout_Opaque *opaque = aout->opaque;
 
-    [opaque->aoutController flush];
+    [(IJKSDLAudioQueueController *)opaque->aoutController flush];
 }
 
 static void aout_close_audio(SDL_Aout *aout)
@@ -79,7 +75,7 @@ static void aout_close_audio(SDL_Aout *aout)
     SDLTRACE("aout_close_audio()\n");
     SDL_Aout_Opaque *opaque = aout->opaque;
 
-    [opaque->aoutController close];
+    [(IJKSDLAudioQueueController *)opaque->aoutController close];
 }
 
 static void aout_set_playback_rate(SDL_Aout *aout, float playbackRate)
@@ -87,13 +83,13 @@ static void aout_set_playback_rate(SDL_Aout *aout, float playbackRate)
     SDLTRACE("aout_close_audio()\n");
     SDL_Aout_Opaque *opaque = aout->opaque;
 
-    [opaque->aoutController setPlaybackRate:playbackRate];
+    [(IJKSDLAudioQueueController *)opaque->aoutController setPlaybackRate:playbackRate];
 }
 
 static double auout_get_latency_seconds(SDL_Aout *aout)
 {
     SDL_Aout_Opaque *opaque = aout->opaque;
-    return [opaque->aoutController get_latency_seconds];
+    return [(IJKSDLAudioQueueController *)opaque->aoutController get_latency_seconds];
 }
 
 static int aout_get_persecond_callbacks(SDL_Aout *aout)
@@ -110,7 +106,7 @@ static void aout_free_l(SDL_Aout *aout)
 
     SDL_Aout_Opaque *opaque = aout->opaque;
     if (opaque) {
-        [opaque->aoutController release];
+        [(IJKSDLAudioQueueController *)opaque->aoutController release];
         opaque->aoutController = nil;
     }
 

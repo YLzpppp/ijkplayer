@@ -210,6 +210,12 @@
     }
 }
 
+- (OSStatus)setPlaybackVolume:(float)playbackVolume {
+    float aq_volume = playbackVolume;
+    return AudioQueueSetParameter(_audioQueueRef, kAudioQueueParam_Volume, aq_volume);
+}
+
+
 - (double)get_latency_seconds
 {
     return ((double)(kIJKAudioQueueNumberBuffers)) * _spec.samples / _spec.freq;

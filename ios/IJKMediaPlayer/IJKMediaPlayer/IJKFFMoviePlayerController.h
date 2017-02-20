@@ -125,6 +125,10 @@ typedef enum IJKLogLevel {
 @property (nonatomic, retain) id<IJKMediaNativeInvokeDelegate> nativeInvokeDelegate;
 
 - (void)didShutdown;
+/**
+ * 调节音量 0.0 ～ 1.0
+ */
+- (BOOL)setAudioVolume:(float)volume;
 
 #pragma mark KVO properties
 @property (nonatomic, readonly) IJKFFMonitor *monitor;

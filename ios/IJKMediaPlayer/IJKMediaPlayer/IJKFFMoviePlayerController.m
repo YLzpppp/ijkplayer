@@ -33,6 +33,8 @@
 #include "string.h"
 #include "ijkplayer/version.h"
 #include "libavformat/ijkavformat.h"
+#import "IJKSDLAudioQueueController.h"
+
 
 static const char *kIJKFFRequiredFFmpegVersion = "ff3.1--ijk0.6.0--20160718--001";
 
@@ -476,6 +478,18 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
 
 - (void)didShutdown
 {
+}
+
+- (BOOL)setAudioVolume:(float)volume {
+    if(!_mediaPlayer || !_mediaPlayer->ffplayer || !_mediaPlayer->ffplayer->aout || !_mediaPlayer->ffplayer->aout->opaque || !_mediaPlayer->ffplayer->aout->opaque->aoutController) {
+        return NO;
+    }
+    OSStatus status = [(__bridge IJKSDLAudioQueueController *)(_mediaPlayer->ffplayer->aout->opaque->aoutController) setPlaybackVolume:volume];
+    if(status == 0) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (IJKMPMoviePlaybackState)playbackState

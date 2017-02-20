@@ -28,6 +28,11 @@
 #include "ijksdl_class.h"
 #include "ijksdl_mutex.h"
 
+
+struct SDL_Aout_Opaque {
+    void *aoutController;
+};
+
 typedef struct SDL_Aout_Opaque SDL_Aout_Opaque;
 typedef struct SDL_Aout SDL_Aout;
 struct SDL_Aout {
